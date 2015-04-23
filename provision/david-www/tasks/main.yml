@@ -22,15 +22,6 @@
   apt:
     name: "iojs={{iojs_version}}"
     state: present
-    update_cache: yes
-    cache_valid_time: 3600
-
-- name: Updating NPM
-  sudo: yes
-  npm:
-    name: "npm"
-    global: yes
-    state: present
 
 - name: Ensure david-www group exists
   sudo: yes
