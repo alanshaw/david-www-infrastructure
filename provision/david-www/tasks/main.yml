@@ -1,0 +1,104 @@
+- name: ensure base OS is up-to-date
+  sudo: yes
+  apt: update=yes
+  apt: upgrade=full
+
+- name: Install Git
+  sudo: yes
+  apt: name=git state=present
+
+- name: Add nodesource apt repository key
+  sudo: yes
+  apt_key:
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+
+- name: Add nodesource iojs apt repository
+  sudo: yes
+  apt_repository:
+    repo: "deb https://deb.nodesource.com/iojs_1.x trusty main"
+
+- name: Install iojs
+  sudo: yes
+  apt:
+    name: "iojs={{iojs_version}}"
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Updating NPM
+  sudo: yes
+  npm:
+    name: "npm"
+    global: yes
+    state: present
+
+- name: Ensure david-www group exists
+  sudo: yes
+  group: name=david-www state=present
+
+- name: Ensure david-www user exists
+  sudo: yes
+  user: name=david-www comment="David" group=david-www
+
+- name: Install Nginx
+  sudo: yes
+  apt: name=nginx state=present
+
+- name: Copy Nginx config
+  sudo: yes
+  copy: src=nginx/david-www.conf dest=/etc/nginx/conf.d/david-www.conf mode=0644 force=yes
+  notify:
+    - Restart Nginx
+
+- name: Ensure Nginx is running
+  sudo: yes
+  service: name=nginx state=started
+
+- name: Copy Upstart config
+  sudo: yes
+  template: src=upstart/david-www.conf dest=/etc/init/david-www.conf mode=0644 force=yes
+
+- name: Copy SSL cert
+  sudo: yes
+  copy: src=ssl/david-dm.org.crt dest=/etc/ssl/certs/david-dm.org.crt mode=0644 force=yes
+  notify:
+    - Restart Nginx
+
+- name: Copy SSL key
+  sudo: yes
+  copy: src=ssl/david-dm.org.key dest=/etc/ssl/private/david-dm.org.key mode=0640 force=yes
+  notify:
+    - Restart Nginx
+
+- name: Clone david-www
+  sudo: yes
+  sudo_user: david-www
+  git: dest=/home/david-www/david-www force=yes repo=https://github.com/alanshaw/david-www.git
+  notify:
+    - Restart david-www
+
+- name: Copy app config
+  sudo: yes
+  sudo_user: david-www
+  copy: src=configs/ dest=/home/david-www/david-www/config
+  notify:
+    - Restart david-www
+
+- shell: npm install -g grunt-cli
+  sudo: yes
+
+- shell: npm install   chdir=/home/david-www/david-www
+  sudo: yes
+  sudo_user: david-www
+
+- shell: grunt clean   chdir=/home/david-www/david-www
+  sudo: yes
+  sudo_user: david-www
+
+- shell: grunt   chdir=/home/david-www/david-www
+  sudo: yes
+  sudo_user: david-www
+
+- name: Ensure the app is running
+  sudo: yes
+  service: name=david-www state=started

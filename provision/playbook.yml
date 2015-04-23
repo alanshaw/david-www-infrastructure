@@ -1,0 +1,14 @@
+- hosts: dev
+  roles:
+    - david-www
+  vars:
+    node_env: development
+    iojs_version: 1.*
+
+
+- hosts: live
+  roles:
+    - david-www
+  vars:
+    node_env: production
+    iojs_version: 1.*
