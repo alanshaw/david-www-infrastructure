@@ -1,7 +1,6 @@
 - name: Ensure base OS is up-to-date
   sudo: yes
-  apt: update=yes
-  apt: upgrade=full
+  apt: update_cache=yes upgrade=full
 
 - name: Install Git
   sudo: yes
