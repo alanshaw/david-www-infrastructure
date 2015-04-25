@@ -1,4 +1,4 @@
-- name: ensure base OS is up-to-date
+- name: Ensure base OS is up-to-date
   sudo: yes
   apt: update=yes
   apt: upgrade=full
@@ -6,6 +6,10 @@
 - name: Install Git
   sudo: yes
   apt: name=git state=present
+
+- name: Install build-essential
+  sudo: yes
+  apt: name=build-essential state=present
 
 - name: Add nodesource apt repository key
   sudo: yes
