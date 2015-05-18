@@ -18,7 +18,7 @@
 - name: Add nodesource iojs apt repository
   sudo: yes
   apt_repository:
-    repo: "deb https://deb.nodesource.com/iojs_1.x trusty main"
+    repo: "deb https://deb.nodesource.com/iojs_2.x trusty main"
 
 - name: Install iojs
   sudo: yes
