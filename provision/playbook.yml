@@ -3,7 +3,7 @@
     - david-www
   vars:
     node_env: development
-    iojs_version: 3.*
+    node_version: 4.*
 
 
 - hosts: live
@@ -11,4 +11,4 @@
     - david-www
   vars:
     node_env: production
-    iojs_version: 3.*
+    node_version: 4.*

@@ -15,15 +15,15 @@
   apt_key:
     url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
 
-- name: Add nodesource iojs apt repository
+- name: Add nodesource Node.js apt repository
   sudo: yes
   apt_repository:
-    repo: "deb https://deb.nodesource.com/iojs_3.x trusty main"
+    repo: "deb https://deb.nodesource.com/node_4.x trusty main"
 
-- name: Install iojs
+- name: Install Node.js
   sudo: yes
   apt:
-    name: "iojs={{iojs_version}}"
+    name: "nodejs={{node_version}}"
     state: present
 
 - name: Ensure david-www group exists
