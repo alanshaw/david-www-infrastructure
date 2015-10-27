@@ -1,3 +1,5 @@
+- { include: swap.yml }
+
 - name: Ensure base OS is up-to-date
   sudo: yes
   apt: update_cache=yes upgrade=full
