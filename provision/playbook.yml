@@ -3,7 +3,7 @@
     - david-www
   vars:
     node_env: development
-    node_version: 4.*
+    node_version: 5.*
 
 
 - hosts: live
@@ -11,4 +11,4 @@
     - david-www
   vars:
     node_env: production
-    node_version: 4.*
+    node_version: 5.*

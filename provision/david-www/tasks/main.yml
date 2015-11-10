@@ -20,7 +20,7 @@
 - name: Add nodesource Node.js apt repository
   sudo: yes
   apt_repository:
-    repo: "deb https://deb.nodesource.com/node_4.x trusty main"
+    repo: "deb https://deb.nodesource.com/node_5.x trusty main"
 
 - name: Install Node.js
   sudo: yes
