@@ -1,100 +1,100 @@
 - { include: swap.yml }
 
 - name: Ensure base OS is up-to-date
-  sudo: yes
+  become: yes
   apt: update_cache=yes upgrade=full
 
 - name: Install Git
-  sudo: yes
+  become: yes
   apt: name=git state=present
 
 - name: Install build-essential
-  sudo: yes
+  become: yes
   apt: name=build-essential state=present
 
 - name: Add nodesource apt repository key
-  sudo: yes
+  become: yes
   apt_key:
     url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
 
 - name: Add nodesource Node.js apt repository
-  sudo: yes
+  become: yes
   apt_repository:
     repo: "deb https://deb.nodesource.com/node_5.x trusty main"
 
 - name: Install Node.js
-  sudo: yes
+  become: yes
   apt:
     name: "nodejs={{node_version}}"
     state: present
 
 - name: Ensure david-www group exists
-  sudo: yes
+  become: yes
   group: name=david-www state=present
 
 - name: Ensure david-www user exists
-  sudo: yes
+  become: yes
   user: name=david-www comment="David" group=david-www
 
 - name: Install Nginx
-  sudo: yes
+  become: yes
   apt: name=nginx state=present
 
 - name: Copy Nginx config
-  sudo: yes
+  become: yes
   copy: src=nginx/david-www.conf dest=/etc/nginx/conf.d/david-www.conf mode=0644 force=yes
   notify:
     - Restart Nginx
 
 - name: Ensure Nginx is running
-  sudo: yes
+  become: yes
   service: name=nginx state=started
 
 - name: Copy Upstart config
-  sudo: yes
+  become: yes
   template: src=upstart/david-www.conf dest=/etc/init/david-www.conf mode=0644 force=yes
 
 - name: Copy SSL cert
-  sudo: yes
+  become: yes
   copy: src=ssl/david-dm.org.crt dest=/etc/ssl/certs/david-dm.org.crt mode=0644 force=yes
   notify:
     - Restart Nginx
 
 - name: Copy SSL key
-  sudo: yes
+  become: yes
   copy: src=ssl/david-dm.org.key dest=/etc/ssl/private/david-dm.org.key mode=0640 force=yes
   notify:
     - Restart Nginx
 
 - name: Clone david-www
-  sudo: yes
-  sudo_user: david-www
+  become: yes
+  become_user: david-www
   git: dest=/home/david-www/david-www force=yes repo=https://github.com/alanshaw/david-www.git
   notify:
     - Restart david-www
 
 - name: Copy app config
-  sudo: yes
-  sudo_user: david-www
-  copy: src=configs/ dest=/home/david-www/david-www/config
+  become: yes
+  become_user: david-www
+  copy: src=configs/{{node_env}}.json dest=/home/david-www/david-www/.davidrc
   notify:
     - Restart david-www
 
 - shell: npm install -g grunt-cli
-  sudo: yes
+  become: yes
 
 - shell: npm install   chdir=/home/david-www/david-www
-  sudo: yes
-  sudo_user: david-www
+  become: yes
+  become_user: david-www
 
 - shell: grunt clean   chdir=/home/david-www/david-www
-  sudo: yes
-  sudo_user: david-www
+  become: yes
+  become_user: david-www
 
 - shell: grunt   chdir=/home/david-www/david-www
-  sudo: yes
-  sudo_user: david-www
+  become: yes
+  become_user: david-www
 
 - name: Ensure the app is running
-  sudo: yes
+  become: yes
   service: name=david-www state=started
