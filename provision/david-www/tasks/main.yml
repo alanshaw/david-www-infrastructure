@@ -80,18 +80,22 @@
   notify:
     - Restart david-www
 
-- shell: npm install -g grunt-cli
+- name: Install grunt-cli
+  shell: npm install -g grunt-cli
   become: yes
 
-- shell: npm install   chdir=/home/david-www/david-www
-  become: yes
-  become_user: david-www
-
-- shell: grunt clean   chdir=/home/david-www/david-www
+- name: Install dependencies
+  shell: npm install   chdir=/home/david-www/david-www
   become: yes
   become_user: david-www
 
-- shell: grunt   chdir=/home/david-www/david-www
+- name: Clean dist dir
+  shell: grunt clean   chdir=/home/david-www/david-www
+  become: yes
+  become_user: david-www
+
+- name: Build the site
+  shell: grunt   chdir=/home/david-www/david-www
   become: yes
   become_user: david-www
 
