@@ -20,7 +20,7 @@
 - name: Add nodesource Node.js apt repository
   become: yes
   apt_repository:
-    repo: "deb https://deb.nodesource.com/node_5.x trusty main"
+    repo: "deb https://deb.nodesource.com/node_6.x trusty main"
 
 - name: Install Node.js
   become: yes
@@ -69,7 +69,7 @@
 - name: Clone david-www
   become: yes
   become_user: david-www
-  git: dest=/home/david-www/david-www force=yes repo=https://github.com/alanshaw/david-www.git
+  git: dest=/home/david-www/david-www force=yes repo=https://github.com/alanshaw/david-www.git version=sponsor
   notify:
     - Restart david-www
 
