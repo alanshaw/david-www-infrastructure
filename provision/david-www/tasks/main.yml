@@ -69,7 +69,7 @@
 - name: Clone david-www
   become: yes
   become_user: david-www
-  git: dest=/home/david-www/david-www force=yes repo=https://github.com/alanshaw/david-www.git version=sponsor
+  git: dest=/home/david-www/david-www force=yes repo=https://github.com/alanshaw/david-www.git version=sponsor2
   notify:
     - Restart david-www
 
@@ -80,22 +80,8 @@
   notify:
     - Restart david-www
 
-- name: Install grunt-cli
-  shell: npm install -g grunt-cli
-  become: yes
-
 - name: Install dependencies
-  shell: npm install   chdir=/home/david-www/david-www
-  become: yes
-  become_user: david-www
-
-- name: Clean dist dir
-  shell: grunt clean   chdir=/home/david-www/david-www
-  become: yes
-  become_user: david-www
-
-- name: Build the site
-  shell: grunt   chdir=/home/david-www/david-www
+  shell: npm install --production  chdir=/home/david-www/david-www
   become: yes
   become_user: david-www
 
