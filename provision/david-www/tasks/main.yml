@@ -73,7 +73,7 @@
 - name: Add nodesource Node.js apt repository
   become: yes
   apt_repository:
-    repo: "deb https://deb.nodesource.com/node_7.x trusty main"
+    repo: "deb https://deb.nodesource.com/node_6.x trusty main"
 
 - name: Install Node.js
   become: yes
