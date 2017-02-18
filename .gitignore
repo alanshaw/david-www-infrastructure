@@ -1,10 +1,8 @@
-.DS_Store
+roles/david-www/files/ssl/david-dm.org.key
+roles/david-www/files/ssl/david-dm.org.crt
 
-provision/david-www/files/ssl/david-dm.org.key
-provision/david-www/files/ssl/david-dm.org.crt
+roles/david-www/files/configs/development.json
+roles/david-www/files/configs/staging.json
+roles/david-www/files/configs/production.json
 
-provision/david-www/files/configs/development.json
-provision/david-www/files/configs/staging.json
-provision/david-www/files/configs/production.json
-
-provision/playbook.retry
+*.retry

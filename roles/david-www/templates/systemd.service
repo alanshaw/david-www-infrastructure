@@ -1,0 +1,17 @@
+[Unit]
+Description=Job that runs the {{service}} service
+
+[Service]
+Type=simple
+WorkingDirectory=/home/{{service}}/current/src
+ExecStart=/usr/bin/npm start
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier={{service}}
+User={{service}}
+Group={{service}}
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target

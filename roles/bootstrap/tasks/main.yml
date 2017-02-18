@@ -1,0 +1,56 @@
+- name: Ensure ansible groups exists
+  become: yes
+  group: name=ansible state=present
+
+- name: Ensure ansible user exists
+  become: yes
+  user: name=ansible comment="Ansible" groups="ansible,sudo"
+
+- name: Set up authorized_keys for the deploy user
+  become: yes
+  authorized_key: user=ansible key="{{ item }}"
+  with_file:
+    - public-keys/alan@tableflip.io.id_rsa.pub
+    - public-keys/oli@tableflip.io.id_rsa.pub
+    - public-keys/richard@tableflip.io.id_rsa.pub
+    - public-keys/bernard@tableflip.io.id_rsa.pub
+
+- name: Set ansible permissions in /etc/sudoers
+  become: yes
+  lineinfile: "dest=/etc/sudoers
+              state=present
+              line='ansible ALL=(ALL) NOPASSWD:ALL'
+              validate='/usr/sbin/visudo -cf %s'"
+
+- name: Set timezone variables
+  become: yes
+  copy: content='Europe/London'
+        dest=/etc/timezone
+        owner=root
+        group=root
+        mode=0644
+        backup=yes
+  notify:
+    - Update timezone
+
+- name: Ensure ntp is installed
+  become: yes
+  apt: name=ntp state=present
+
+- name: Ensure ntp running and enabled at boot
+  become: yes
+  service: name=ntp state=started enabled=yes
+
+- name: Install Git
+  become: yes
+  apt: name=git state=present
+
+- name: Add github.com identity key to known_hosts
+  become: yes
+  lineinfile:
+    state: present
+    line: github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+    dest: /etc/ssh/ssh_known_hosts
+    create: true
+
+- { include: swap.yml }
