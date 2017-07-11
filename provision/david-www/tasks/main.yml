@@ -122,7 +122,7 @@
 - name: Clone david-www
   become: yes
   become_user: david-www
-  git: dest=/home/david-www/david-www force=yes repo=https://github.com/alanshaw/david-www.git version=sponsor2
+  git: dest=/home/david-www/david-www force=yes repo=https://github.com/alanshaw/david-www.git version=master
   notify:
     - Restart david-www
 
