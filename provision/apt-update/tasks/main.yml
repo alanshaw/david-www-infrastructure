@@ -1,0 +1,3 @@
+- name: Ensure base OS is up-to-date
+  become: yes
+  apt: upgrade=dist update_cache=yes

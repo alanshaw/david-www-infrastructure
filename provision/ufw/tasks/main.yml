@@ -1,0 +1,21 @@
+- name: Allow ssh
+  become: yes
+  command: /usr/sbin/ufw allow ssh
+  register: command_result
+  changed_when: "'Rules updated' in command_result.stdout"
+
+- name: Allow ntp (123)
+  become: yes
+  command: /usr/sbin/ufw allow 123/udp
+  register: command_result
+  changed_when: "'Rules updated' in command_result.stdout"
+
+- name: Allow http (80 & 443)
+  become: yes
+  command: /usr/sbin/ufw allow 80,443/tcp
+  register: command_result
+  changed_when: "'Rules updated' in command_result.stdout"
+
+- name: Enable ufw
+  become: yes
+  command: /usr/sbin/ufw --force enable

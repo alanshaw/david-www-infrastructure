@@ -7,19 +7,27 @@ Originally built for Ubuntu Server 14.04.1 LTS.
 ## Updating an existing deployment
 
 1. [Install Ansible](http://docs.ansible.com/intro_installation.html) on your local machine
-2. Have an existing user add your public ssh key to `/home/ansible/.ssh/authorized_keys` on the server so when you run ansible, you're able to login  as the ansible user
-3. Obtain the SSL certificate and key for david-dm.org:
-    * `provision/david-www/files/ssl/david-dm.org.key`
-    * `provision/david-www/files/ssl/david-dm.org.crt`
-4. Obtain existing production configuration for the site and copy into place:
+2. Have an existing user add your public ssh key to `/home/ansible/.ssh/authorized_keys` on the server so when you run ansible, you're able to login as the ansible user
+3. Obtain existing production configuration for the site and copy into place:
     * `provision/david-www/files/configs/production.json`
-5. Run ansible
+4. Run ansible
 
     ```sh
     ansible-playbook -v -i provision/dev provision/playbook.yml
     ```
 
     (Replace `provision/dev` with the environment you want to provision)
+
+## Setting up a local test server with vagrant
+
+- Add `10.211.55.6	dev.davd-dm.org` to your local `/etc/hosts`
+
+```sh
+# Download and provision a vm
+vagrant up
+```
+
+You now have a test vm, running locally.
 
 ## Setting up a new deployment
 

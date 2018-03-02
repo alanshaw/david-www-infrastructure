@@ -1,14 +1,23 @@
 - hosts: dev
   roles:
+    - apt-update
+    - bootstrap
+    - ufw
+    - nginx
+    - node
     - david-www
   vars:
     node_env: development
-    node_version: 6.*
-
 
 - hosts: live
   roles:
+    - apt-update
+    - bootstrap
+    - ufw
+    - nginx
+    - letsencrypt
+    - node
     - david-www
+    - david-www-letsencrypt
   vars:
     node_env: production
-    node_version: 6.*

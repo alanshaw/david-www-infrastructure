@@ -1,0 +1,2 @@
+ansible_user: ansible
+tls_cert_email: hello@tableflip.io
